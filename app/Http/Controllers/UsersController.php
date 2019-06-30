@@ -102,5 +102,23 @@ class UsersController extends Controller
 
         return view('users.followers', $data);
     }
-    
+
+
+    // 125番目のユーザーがお気に入り登録している投稿一覧を表示する
+    // http://laravel-microposts.herokuapp.com/users/125/favorites [GET形式]
+    public function favorites($id)
+    {
+        $data = [];
+        $user = \App\User::find($id);
+        $microposts = $user->favorites()->orderBy('created_at', 'desc')->paginate(5);
+
+        $data = [
+            'user' => $user,
+            'microposts' => $microposts,
+        ];
+        
+        $data += $this->counts($user);
+        
+        return view('users.favorites', $data);
+    }
 }

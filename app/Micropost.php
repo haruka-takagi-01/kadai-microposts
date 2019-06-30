@@ -8,8 +8,21 @@ class Micropost extends Model
 {
     protected $fillable = ['content', 'user_id'];
 
+    //
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+    
+    // 
+    public function favorite_users()
+    {
+        return $this->belongsToMany(User::class, 'favorites', 'micropost_id', 'user_id')->withTimestamps();;
+    }
+
+
+    public function is_favorite($micropost_id)
+    {
+        return $this->favorite()->where('id', $micropost_id)->exists();
     }
 }
